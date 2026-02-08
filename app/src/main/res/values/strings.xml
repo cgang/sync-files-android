@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">SyncFiles</string>
+
+    <!-- Setup Screen -->
+    <string name="setup_title">Welcome to SyncFiles</string>
+    <string name="setup_description">Enter your File Hub server URL to get started</string>
+    <string name="setup_server_url_hint">Server URL (e.g., https://filehub.example.com:8080)</string>
+    <string name="setup_connect">Connect</string>
+    <string name="setup_validate">Validating server…</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Sign In</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_logout">Log Out</string>
+    <string name="login_logging_in">Signing in…</string>
+    <string name="login_error">Login failed. Please check your credentials.</string>
+
+    <!-- File Browser -->
+    <string name="files_title">Files</string>
+    <string name="files_refresh">Refresh</string>
+    <string name="files_folders_first">Folders first</string>
+    <string name="files_sort">Sort by</string>
+    <string name="files_empty_folder">This folder is empty</string>
+    <string name="files_loading">Loading files…</string>
+    <string name="files_error">Failed to load files</string>
+    <string name="files_retry">Retry</string>
+
+    <!-- File Actions -->
+    <string name="file_download">Download</string>
+    <string name="file_downloading">Downloading %s…</string>
+    <string name="file_download_complete">Download complete</string>
+    <string name="file_download_failed">Download failed</string>
+    <string name="file_size">%s</string>
+    <string name="file_modified">Modified %s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_server_url">Server URL</string>
+    <string name="settings_server_url_change">Change Server</string>
+    <string name="settings_version">Version %s</string>
+
+    <!-- Errors -->
+    <string name="error_network">Network error</string>
+    <string name="error_server">Server error</string>
+    <string name="error_unauthorized">Unauthorized</string>
+    <string name="error_not_found">Not found</string>
+    <string name="error_unknown">An error occurred</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="retry">Retry</string>
+    <string name="close">Close</string>
+</resources>
