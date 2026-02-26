@@ -1,5 +1,6 @@
 package com.github.cgang.syncfiles.data.repository
 
+import com.github.cgang.syncfiles.data.remote.api.FileHubApi
 import com.github.cgang.syncfiles.domain.model.User
 import com.github.cgang.syncfiles.security.CredentialManager
 import com.github.cgang.syncfiles.security.SessionManager
@@ -14,63 +15,95 @@ interface AuthRepository {
 
 class AuthRepositoryImpl(
     private val credentialManager: CredentialManager,
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val fileHubApi: FileHubApi
 ) : AuthRepository {
 
     override suspend fun setup(username: String, password: String, email: String): Result<User> {
-        // TODO: Implement actual network call with OkHttp
         return try {
-            credentialManager.saveCredentials(username, password)
-
-            val user = User(
-                id = 0,
-                username = username,
-                email = email,
-                firstName = null,
-                lastName = null,
-                isActive = true,
-                isAdmin = true
-            )
-
-            sessionManager.setCurrentUser(user)
-            Result.success(user)
+            // Update API base URL with server URL from session manager
+            fileHubApi.setBaseUrl(sessionManager.serverUrl)
+            
+            // Call setup API
+            fileHubApi.setup(username, password, email)
+                .map {
+                    // Save credentials
+                    credentialManager.saveCredentials(username, password)
+                    
+                    // Create user object
+                    User(
+                        id = 0,
+                        username = username,
+                        email = email,
+                        firstName = null,
+                        lastName = null,
+                        isActive = true,
+                        isAdmin = true
+                    )
+                }
+                .onSuccess { user ->
+                    sessionManager.setCurrentUser(user)
+                }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
     override suspend fun login(username: String, password: String): Result<User> {
-        // TODO: Implement actual network call with OkHttp
         return try {
-            credentialManager.saveCredentials(username, password)
-
-            val user = User(
-                id = 0,
-                username = username,
-                email = "",
-                firstName = null,
-                lastName = null,
-                isActive = true,
-                isAdmin = false
-            )
-
-            sessionManager.setCurrentUser(user)
-            Result.success(user)
+            // Update API base URL with server URL from session manager
+            fileHubApi.setBaseUrl(sessionManager.serverUrl)
+            
+            // Call login API
+            fileHubApi.login(username, password)
+                .map {
+                    // Save credentials
+                    credentialManager.saveCredentials(username, password)
+                    
+                    // Create user object
+                    User(
+                        id = 0,
+                        username = username,
+                        email = "",
+                        firstName = null,
+                        lastName = null,
+                        isActive = true,
+                        isAdmin = false
+                    )
+                }
+                .onSuccess { user ->
+                    sessionManager.setCurrentUser(user)
+                }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
     override suspend fun logout(): Result<Unit> {
-        // TODO: Implement actual network call with OkHttp
-        credentialManager.clearCredentials()
-        sessionManager.clearCurrentUser()
-        return Result.success(Unit)
+        return try {
+            fileHubApi.logout()
+                .map {
+                    credentialManager.clearCredentials()
+                    sessionManager.clearCurrentUser()
+                    Unit
+                }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun checkStatus(): Result<Boolean> {
-        // TODO: Implement actual network call with OkHttp
-        return Result.success(true) // Stubbed for now
+        return try {
+            // Update API base URL with server URL from session manager
+            fileHubApi.setBaseUrl(sessionManager.serverUrl)
+            
+            fileHubApi.checkServerStatus()
+                .map { response ->
+                    response.status == "ok" || response.status == "ready"
+                }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override fun getCurrentUser(): User? {

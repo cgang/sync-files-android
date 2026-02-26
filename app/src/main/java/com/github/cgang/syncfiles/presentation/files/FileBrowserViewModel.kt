@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.github.cgang.syncfiles.domain.usecase.DownloadFileUseCase
 import com.github.cgang.syncfiles.domain.usecase.GetFilesUseCase
 import com.github.cgang.syncfiles.domain.model.FileObject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed class FileBrowserUiState {
     object Idle : FileBrowserUiState()
@@ -17,7 +19,8 @@ sealed class FileBrowserUiState {
     data class Error(val message: String) : FileBrowserUiState()
 }
 
-class FileBrowserViewModel(
+@HiltViewModel
+class FileBrowserViewModel @Inject constructor(
     private val getFilesUseCase: GetFilesUseCase,
     private val downloadFileUseCase: DownloadFileUseCase
 ) : ViewModel() {
