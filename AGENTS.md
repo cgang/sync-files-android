@@ -107,6 +107,32 @@ This repository contains Android client that connect to the File Hub server - a 
 
 ## Development Workflow
 
+### Protocol Issue Tracking
+
+When implementing features that interact with the File Hub server, you may encounter ambiguous, incomplete, or unclear aspects of the sync protocol or API behavior.
+
+**Create and maintain `ISSUES.md` for protocol-related questions:**
+
+1. **When to document:**
+   - API endpoint behavior is unclear or underspecified
+   - Sync protocol has gaps or edge cases not covered in documentation
+   - Request/response formats are ambiguous
+   - Error handling scenarios are not defined
+   - Authentication flow has undocumented steps
+
+2. **What to include:**
+   - Clear description of the ambiguous behavior
+   - Affected API endpoints or protocol operations
+   - Expected behavior vs. observed/unclear behavior
+   - Questions for server developers
+   - Any workarounds or assumptions made
+
+3. **Purpose:**
+   - Track open questions for coordination with server developers
+   - Prevent silent assumptions that may cause bugs
+   - Create a reference for protocol clarifications
+   - Enable parallel development while issues are resolved
+
 ### Code Review Focus
 
 When reviewing or generating code:
