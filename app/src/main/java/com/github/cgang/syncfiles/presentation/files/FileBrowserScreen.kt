@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -22,10 +20,12 @@ fun FileBrowserScreen(
     repoName: String,
     initialPath: String = "/",
     onLogout: () -> Unit,
+    onNavigateToSync: () -> Unit,
     viewModel: FileBrowserViewModel
 ) {
     var currentPath by remember { mutableStateOf(initialPath) }
     val uiState by viewModel.uiState.collectAsState()
+    var showMenu by remember { mutableStateOf(false) }
 
     LaunchedEffect(repoName, currentPath) {
         viewModel.loadFiles(repoName, currentPath)
@@ -67,8 +67,34 @@ fun FileBrowserScreen(
                     ) {
                         Icon(Icons.Default.Refresh, contentDescription = "Refresh")
                     }
-                    IconButton(onClick = onLogout) {
+                    IconButton(onClick = { showMenu = true }) {
                         Icon(Icons.Default.MoreVert, contentDescription = "Options")
+                    }
+                    
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("DCIM Sync") },
+                            onClick = {
+                                showMenu = false
+                                onNavigateToSync()
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.Sync, contentDescription = null)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Logout") },
+                            onClick = {
+                                showMenu = false
+                                onLogout()
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.Logout, contentDescription = null)
+                            }
+                        )
                     }
                 }
             )

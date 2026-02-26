@@ -14,6 +14,8 @@ import com.github.cgang.syncfiles.presentation.login.LoginScreen
 import com.github.cgang.syncfiles.presentation.login.LoginViewModel
 import com.github.cgang.syncfiles.presentation.setup.SetupScreen
 import com.github.cgang.syncfiles.presentation.setup.SetupViewModel
+import com.github.cgang.syncfiles.presentation.sync.SyncScreen
+import com.github.cgang.syncfiles.presentation.sync.SyncViewModel
 
 sealed class Screen(val route: String) {
     object Setup : Screen("setup")
@@ -21,6 +23,7 @@ sealed class Screen(val route: String) {
     object FileBrowser : Screen("file_browser/{repoName}") {
         fun createRoute(repoName: String) = "file_browser/$repoName"
     }
+    object Sync : Screen("sync")
 }
 
 @Composable
@@ -77,6 +80,19 @@ fun NavGraph(
                     navController.navigate(Screen.Login.route) {
                         popUpTo(0) { inclusive = true }
                     }
+                },
+                onNavigateToSync = {
+                    navController.navigate(Screen.Sync.route)
+                },
+                viewModel = viewModel
+            )
+        }
+
+        composable(Screen.Sync.route) {
+            val viewModel: SyncViewModel = hiltViewModel()
+            SyncScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
                 },
                 viewModel = viewModel
             )
