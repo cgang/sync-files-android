@@ -34,7 +34,7 @@ google-services.json
 *.hprof
 
 .gradle
-/gradle
+!/gradle/wrapper/
 local.properties
 
 .DS_Store
